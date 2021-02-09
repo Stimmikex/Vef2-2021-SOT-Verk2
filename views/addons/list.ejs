@@ -1,0 +1,22 @@
+<div>
+  <table>
+      <tr>
+        <th>Dags</th>
+        <th>Nafn</th>
+        <th>Kennitala</th>
+        <th>Athugasemd</th>
+      </tr>
+      <% data.forEach((item) => { %>
+        <tr>
+          <td><%= item.signed %></td>
+          <% if (!item.anonumous) { %>
+            <td><%= item.name; %></td>
+          <% } else { %>
+            <td>anonumous user</td>
+          <% } %>
+          <td><%= item.nationalId %></td>
+          <td><%= item.comment %></td>
+        </tr>
+      <% }) %> 
+  </table>
+</div>

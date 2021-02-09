@@ -1,0 +1,21 @@
+<div class="addon">
+    <form method="post" action="/post" class="form">
+        <h1 class="form-title"><%= title %> </h1>
+        <div class="form-name">
+            <label>Nafn*: </label>
+            <input type="text" name="name" id="name" class="">
+        </div>
+        <div class="form-id">
+            <label>Kennitala*: </label>
+            <input type="text" name="nationalId" id="nationalId">
+        </div>
+        <div class="form-area">
+            <label>Athugasemd: </label>
+            <textarea type="textarea" id="message" name="text"></textarea>
+        </div>
+        <div class="form-box"><input type="checkbox" name="check" id="check">
+            <label>Ekki birta nafn á lista</label>
+        </div>
+        <input type="submit" value="Skrifa undir">
+    </form>
+</div>
