@@ -22,65 +22,39 @@ app.use(express.urlencoded({
   extended: true,
 }));
 
-const nationalIdPattern = '^[0-9]{6}-?[0-9]{4}$';
-
-// function template(name = '', nationalId = '', text = '', check = '') {
-//   return `
-//   <div class="addon">
-//   <form method="post" action="/post" class="form">
-//       <h1 class="form-title">Undirskriftarlisti</h1>
-//       <div class="form-name">
-//           <label>Nafn*: </label>
-//           <input type="text" name="name" id="name" class="" value="${name}" required>
-//       </div>
-//       <div class="form-id">
-//           <label>Kennitala*: </label>
-//           <input type="text" name="nationalId" value="${nationalId}", pattern="${nationalIdPattern}" required>
-//       </div>
-//       <div class="form-area">
-//           <label>Athugasemd: </label>
-//           <textarea type="textarea" id="message" name="text" value="${text}"></textarea>
-//       </div>
-//       <div class="form-box"><input type="checkbox" name="check" id="check" value="${check}">
-//           <label>Ekki birta nafn á lista</label>
-//       </div>
-//       <input type="submit" value="Skrifa undir">
-//   </form>
-// </div>
-//   `;
-// }
-
-// app.get('/', (req, res) => {
-//   res.send(template());
-// });
-
-app.get('/', async (req, res) => {
+async function getData() {
   let data = await query('SELECT * FROM signatures');
   data = data.rows;
   try {
-    res.render('index', { title: 'Undirskriftarlisti', data });
+    return data; 
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(e);
+  }
+}
+
+function checker() {
+  const check = body('check').checked;
+  if (check) {
+    return true;
+  }
+  return false;
+}
+
+const nationalIdPattern = '^[0-9]{6}-?[0-9]{4}$';
+
+app.get('/', async (req, res) => {
+  const data = await getData();
+  try {
+    res.render('index', { title: 'Undirskriftarlisti', data});
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(e);
   }
 });
 
-// app.post('/', (req, res) => {
-//   res.render('index', {
-//     data: req.body, // { message, email }
-//     errors: {
-//       message: {
-//         msg: 'A message is required',
-//       },
-//       email: {
-//         msg: 'That email doesn‘t look right',
-//       },
-//     },
-//   });
-// });
-
 app.post(
-  '/post',
+  '/',
   // Þetta er bara validation, ekki sanitization
   body('name')
     .isLength({ min: 1 })
@@ -129,7 +103,7 @@ app.post(
   // skemma gögnin okkar, því kennitölur geta byrjað á 0
   body('nationalId').blacklist('-'),
 
-  (req, res) => {
+  async (req, res) => {
     const {
       name,
       nationalId,
@@ -137,19 +111,9 @@ app.post(
       check,
     } = req.body;
 
-    return res.send(`
-      <p>Skráning móttekin!</p>
-      <dl>
-        <dt>Nafn</dt>
-        <dd>${name}</dd>
-        <dt>Kennitala</dt>
-        <dd>${nationalId}</dd>
-        <dt>Text</dt>
-        <dd>${text}</dd>
-        <dt>Checked</dt>
-        <dd>${check}</dd>
-      </dl>
-    `);
+    query('INSERT INTO signatures(name, nationalId, comment, anonymous) VALUES($1, $2, $3, $4) RETURNING *', [name, nationalId, text, checker()]);
+    const data = await getData();
+    return res.render('index',{ title: 'Undirskriftarlisti', data, nationalIdPattern});
   },
 );
 

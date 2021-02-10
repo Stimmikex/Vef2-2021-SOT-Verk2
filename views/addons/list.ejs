@@ -9,12 +9,12 @@
       <% data.forEach((item) => { %>
         <tr>
           <td><%= item.signed %></td>
-          <% if (!item.anonumous) { %>
+          <% if (!item.anonymous) { %>
             <td><%= item.name; %></td>
           <% } else { %>
             <td>anonumous user</td>
           <% } %>
-          <td><%= item.nationalId %></td>
+          <td><%= item.nationalid %></td>
           <td><%= item.comment %></td>
         </tr>
       <% }) %> 
