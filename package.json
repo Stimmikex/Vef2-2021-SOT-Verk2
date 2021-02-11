@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Verkefnið felst í því að smíða vef lítinn myndbandavef sem nýtir gögn úr JSON skrá.",
   "main": "src/app.js",
-  "type": "module",
   "scripts": {
     "test:eslint": "eslint \"./src/**/*.js\" --fix",
     "test:stylelint": "stylelint \"./public/sass/**/*.scss\" --syntax scss",
