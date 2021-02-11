@@ -24,7 +24,7 @@ app.use(express.urlencoded({
 }));
 
 async function getData() {
-  let data = await query('SELECT * FROM signatures');
+  let data = await query('SELECT * FROM signatures ORDER BY id DESC;');
   data = data.rows;
   try {
     return data; 
@@ -34,12 +34,11 @@ async function getData() {
   }
 }
 
-function checker() {
-  const check = body('check').checked;
-  if (check) {
-    return false;
+function checker(check) {
+  if (check == "on") {
+    return true;
   }
-  return true;
+  return false;
 }
 
 const nationalIdPattern = '^[0-9]{6}-?[0-9]{4}$';
@@ -80,11 +79,6 @@ app.post(
       check = '',
     } = req.body;
 
-    let xss_name = xss(name);
-    let xss_national = xss(nationalId);
-    let xss_text = xss(text);
-    let xss_check = xss(check);
-
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -121,7 +115,12 @@ app.post(
       check,
     } = req.body;
 
-    query('INSERT INTO signatures(name, nationalId, comment, anonymous) VALUES($1, $2, $3, $4) RETURNING *', [name, nationalId, text, checker()]);
+    let xss_name = xss(name);
+    let xss_national = xss(nationalId);
+    let xss_text = xss(text);
+    console.log(check);
+
+    query('INSERT INTO signatures(name, nationalId, comment, anonymous) VALUES($1, $2, $3, $4) RETURNING *', [xss_name, xss_national, xss_text, checker(check)]);
     const data = await getData();
     return res.render('index',{ title: 'Undirskriftarlisti', data});
   },
