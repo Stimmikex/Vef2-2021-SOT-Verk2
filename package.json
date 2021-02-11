@@ -8,7 +8,7 @@
     "test:eslint": "eslint \"./src/**/*.js\" --fix",
     "test:stylelint": "stylelint \"./public/styles/**/*.scss\" --syntax scss",
     "test": "concurrently npm:test:*",
-    "build:sass": "node-sass --source-map-embed ./public/styles.scss ./public/styles.css",
+    "build:sass": "node-sass --source-map-embed ./public/style.scss ./public/style.css",
     "build": "concurrently npm:build:*",
     "dev:sass": "node-sass --source-map-embed --watch ./public/styles.scss --recursive ./dist/styles.css",
     "dev": "npm run build:sass && concurrently npm:dev:*",
@@ -35,6 +35,7 @@
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "express-validator": "^6.9.2",
-    "pg": "^8.5.1"
+    "pg": "^8.5.1",
+    "xss": "^1.0.8"
   }
 }

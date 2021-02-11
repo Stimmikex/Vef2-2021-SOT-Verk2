@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import xss from 'xss';
 import { body, validationResult } from 'express-validator';
 import { query } from './db.js';
 
@@ -36,9 +37,9 @@ async function getData() {
 function checker() {
   const check = body('check').checked;
   if (check) {
-    return true;
+    return false;
   }
-  return false;
+  return true;
 }
 
 const nationalIdPattern = '^[0-9]{6}-?[0-9]{4}$';
@@ -59,6 +60,9 @@ app.post(
   body('name')
     .isLength({ min: 1 })
     .withMessage('Nafn má ekki vera tómt'),
+   body('name')
+    .isLength({ max: 128 })
+    .withMessage('Nafn er of langt'),
   body('nationalId')
     .isLength({ min: 1 })
     .withMessage('Kennitala má ekki vera tóm'),
@@ -76,19 +80,25 @@ app.post(
       check = '',
     } = req.body;
 
+    let xss_name = xss(name);
+    let xss_national = xss(nationalId);
+    let xss_text = xss(text);
+    let xss_check = xss(check);
+
     const errors = validationResult(req);
 
-    // if (!errors.isEmpty()) {
-    //   const errorMessages = errors.array().map(i => i.msg);
-    //   return res.send(
-    //     `${template(name, nationalId, text, check)}
-    //     <p>Villur:</p>
-    //     <ul>
-    //       <li>${errorMessages.join('</li><li>')}</li>
-    //     </ul>
-    //   `,
-    //   );
-    // }
+    if (!errors.isEmpty()) {
+      const errorMessages = errors.array().map(i => i.msg);
+      return res.send(
+        `
+        <p>Villur:</p>
+        <ul>
+          <li>${errorMessages.join('</li><li>')}</li>
+        </ul>
+      `,
+      );
+      // return res.render('index',{ title: 'Undirskriftarlisti', data});
+    }
     return next();
   },
   /* Nú sanitizeum við gögnin, þessar aðgerðir munu breyta gildum í body.req */
@@ -113,7 +123,7 @@ app.post(
 
     query('INSERT INTO signatures(name, nationalId, comment, anonymous) VALUES($1, $2, $3, $4) RETURNING *', [name, nationalId, text, checker()]);
     const data = await getData();
-    return res.render('index',{ title: 'Undirskriftarlisti', data, nationalIdPattern});
+    return res.render('index',{ title: 'Undirskriftarlisti', data});
   },
 );
 

@@ -1,0 +1,12 @@
+.table {
+    border: solid;
+    &-header {
+        border: solid;
+    }
+    &-data {
+        td {
+            border: solid;
+            text-align: center;
+        }
+    }
+}

@@ -1,21 +1,22 @@
-<div class="addon">
+<div class="addon grid">
     <form method="post" action="/" class="form">
         <h1 class="form-title"><%= title %> </h1>
-        <div class="form-name">
-            <label>Nafn*: </label>
-            <input type="text" name="name" id="name" class="">
+        <div class="form-name row">
+            <label class="col-2">Nafn*: </label>
+            <input type="text" name="name" id="name" class="col-9">
         </div>
-        <div class="form-id">
-            <label>Kennitala*: </label>
-            <input type="text" name="nationalId" id="nationalId">
+        <div class="form-id row">
+            <label class="col-2">Kennitala*: </label>
+            <input type="text" name="nationalId" id="nationalId" class="col-9">
         </div>
-        <div class="form-area">
-            <label>Athugasemd: </label>
-            <textarea type="textarea" id="message" name="text"></textarea>
+        <div class="form-area row">
+            <label class="col-2">Athugasemd: </label>
+            <textarea type="textarea" id="message" name="text" class="col-9"></textarea>
         </div>
-        <div class="form-box"><input type="checkbox" name="check" id="check">
+        <div class="form-box row">
+            <input type="checkbox" name="check" id="check">
             <label>Ekki birta nafn á lista</label>
         </div>
-        <input type="submit" value="Skrifa undir">
+        <input type="submit" value="Skrifa undir" class="row">
     </form>
 </div>
