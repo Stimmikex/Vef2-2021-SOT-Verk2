@@ -108,6 +108,8 @@ app.post(
   // skemma gögnin okkar, því kennitölur geta byrjað á 0
   body('nationalId').blacklist('-'),
 
+  body('text').trim().escape(),
+
   async (req, res) => {
     const {
       name,
