@@ -1,13 +1,12 @@
 import pg from 'pg';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 const {
   DATABASE_URL: connectionString,
   NODE_ENV: nodeEnv = 'development',
 } = process.env;
-
-console.log('process.env :>> ', process.env.DATABASE_URL);
 
 if (!connectionString) {
   console.error('Vantar DATABASE_URL!');
@@ -16,7 +15,7 @@ if (!connectionString) {
 
 const ssl = nodeEnv !== 'development' ? { rejectUnauthorized: false } : false;
 
-const pool = new pg.Pool({ connectionString });
+const pool = new pg.Pool({ connectionString, ssl });
 
 pool.on('error', (err) => {
   console.error('Unexpected error on idle client', err);
@@ -29,9 +28,10 @@ export async function query(q, values = []) {
   try {
     const result = await client.query(q, values);
     return result;
-  } catch(e) {
+  } catch (e) {
     console.error('Error selecting', e);
   } finally {
     client.release();
   }
+  return 'no data from query';
 }

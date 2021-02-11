@@ -6,11 +6,11 @@
   "type": "module",
   "scripts": {
     "test:eslint": "eslint \"./src/**/*.js\" --fix",
-    "test:stylelint": "stylelint \"./public/styles/**/*.scss\" --syntax scss",
+    "test:stylelint": "stylelint \"./public/sass/**/*.scss\" --syntax scss",
     "test": "concurrently npm:test:*",
     "build:sass": "node-sass --source-map-embed ./public/style.scss ./public/style.css",
     "build": "concurrently npm:build:*",
-    "dev:sass": "node-sass --source-map-embed --watch ./public/styles.scss --recursive ./dist/styles.css",
+    "dev:sass": "node-sass --source-map-embed --watch ./public/style.scss --recursive ./dist/style.css",
     "dev": "npm run build:sass && concurrently npm:dev:*",
     "start-dev": "nodemon ./src/app.js",
     "start": "node ./src/app.js"

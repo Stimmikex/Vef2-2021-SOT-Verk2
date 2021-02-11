@@ -27,15 +27,16 @@ async function getData() {
   let data = await query('SELECT * FROM signatures ORDER BY id DESC;');
   data = data.rows;
   try {
-    return data; 
+    return data;
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(e);
   }
+  return 'No Data';
 }
 
 function checker(check) {
-  if (check == "on") {
+  if (check === 'on') {
     return true;
   }
   return false;
@@ -46,7 +47,7 @@ const nationalIdPattern = '^[0-9]{6}-?[0-9]{4}$';
 app.get('/', async (req, res) => {
   const data = await getData();
   try {
-    res.render('index', { title: 'Undirskriftarlisti', data});
+    res.render('index', { title: 'Undirskriftarlisti', data });
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(e);
@@ -59,7 +60,7 @@ app.post(
   body('name')
     .isLength({ min: 1 })
     .withMessage('Nafn má ekki vera tómt'),
-   body('name')
+  body('name')
     .isLength({ max: 128 })
     .withMessage('Nafn er of langt'),
   body('nationalId')
@@ -72,17 +73,17 @@ app.post(
   body('check'),
 
   (req, res, next) => {
-    const {
-      name = '',
-      nationalId = '',
-      text = '',
-      check = '',
-    } = req.body;
+    // const {
+    //   name = '',
+    //   nationalId = '',
+    //   text = '',
+    //   check = '',
+    // } = req.body;
 
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      const errorMessages = errors.array().map(i => i.msg);
+      const errorMessages = errors.array().map((i) => i.msg);
       return res.send(
         `
         <p>Villur:</p>
@@ -115,22 +116,21 @@ app.post(
       check,
     } = req.body;
 
-    let xss_name = xss(name);
-    let xss_national = xss(nationalId);
-    let xss_text = xss(text);
-    console.log(check);
+    const xssName = xss(name);
+    const xssNational = xss(nationalId);
+    const xssText = xss(text);
 
-    query('INSERT INTO signatures(name, nationalId, comment, anonymous) VALUES($1, $2, $3, $4) RETURNING *', [xss_name, xss_national, xss_text, checker(check)]);
+    query('INSERT INTO signatures(name, nationalId, comment, anonymous) VALUES($1, $2, $3, $4) RETURNING *', [xssName, xssNational, xssText, checker(check)]);
     const data = await getData();
-    return res.render('index',{ title: 'Undirskriftarlisti', data});
+    return res.render('index', { title: 'Undirskriftarlisti', data });
   },
 );
 
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).send("Sorry can't find that!");
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
