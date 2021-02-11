@@ -1,5 +1,10 @@
 # Vef2 2021, verkefni 2
 
+Keyrsla á verkefninu localhost -> npm install -> npm run build -> npm run start.
+
+Keyrsla er sýnileg á Heroku á linknum: https://vef2-2021-sot-v2.herokuapp.com/
+
+
 [Kynning í fyrirlestri](https://www.youtube.com/watch?v=1kRJBE040oY).
 
 Verkefnið snýst um að útbúa einfaldan undirskriftarlista með skráningu og birtingu skráninga.
