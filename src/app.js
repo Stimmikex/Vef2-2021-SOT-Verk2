@@ -47,7 +47,8 @@ const nationalIdPattern = '^[0-9]{6}-?[0-9]{4}$';
 app.get('/', async (req, res) => {
   const data = await getData();
   try {
-    res.render('index', { title: 'Undirskriftarlisti', data });
+    const errorMessages = "";
+    res.render('index', { title: 'Undirskriftarlisti', data, errorMessages});
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(e);
@@ -72,7 +73,7 @@ app.post(
   body('text'),
   body('check'),
 
-  (req, res, next) => {
+  async (req, res, next) => {
     // const {
     //   name = '',
     //   nationalId = '',
@@ -84,15 +85,16 @@ app.post(
 
     if (!errors.isEmpty()) {
       const errorMessages = errors.array().map((i) => i.msg);
-      return res.send(
-        `
-        <p>Villur:</p>
-        <ul>
-          <li>${errorMessages.join('</li><li>')}</li>
-        </ul>
-      `,
-      );
-      // return res.render('index',{ title: 'Undirskriftarlisti', data});
+      // return res.send(
+      //   `
+      //   <p>Villur:</p>
+      //   <ul>
+      //     <li>${errorMessages.join('</li><li>')}</li>
+      //   </ul>
+      // `,
+      // );
+      const data = await getData();
+      return res.render('index',{ title: 'Undirskriftarlisti', data, errorMessages});
     }
     return next();
   },
@@ -124,7 +126,8 @@ app.post(
 
     query('INSERT INTO signatures(name, nationalId, comment, anonymous) VALUES($1, $2, $3, $4) RETURNING *', [xssName, xssNational, xssText, checker(check)]);
     const data = await getData();
-    return res.render('index', { title: 'Undirskriftarlisti', data });
+    const errorMessages = "";
+    return res.render('index', { title: 'Undirskriftarlisti', data, errorMessages});
   },
 );
 

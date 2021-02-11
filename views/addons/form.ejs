@@ -20,3 +20,12 @@
         <input type="submit" value="Skrifa undir" class="row">
     </form>
 </div>
+<div>
+    <% if(errorMessages !== '') { %>
+        <ul>
+            <% errorMessages.forEach((error) => { %>
+                <li><%= error %></li>
+            <% }) %> 
+        </ul>
+    <% } %> 
+</div>
