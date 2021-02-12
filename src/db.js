@@ -30,8 +30,8 @@ export async function query(q, values = []) {
     return result;
   } catch (e) {
     console.error('Error selecting', e);
+    return e;
   } finally {
     client.release();
   }
-  return 'no data from query';
 }

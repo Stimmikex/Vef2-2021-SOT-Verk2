@@ -14,13 +14,15 @@
             <textarea type="textarea" id="message" name="text" class="col-10"></textarea>
         </div>
         <div class="form-box row">
-            <input type="checkbox" name="check" id="check">
-            <label>Ekki birta nafn á lista</label>
+            <div class="form-box-container">
+                <input type="checkbox" name="check" id="check">
+                <label>Ekki birta nafn á lista</label>
+            </div>
         </div>
-        <input type="submit" value="Skrifa undir" class="row">
+        <input type="submit" value="Skrifa undir" class="row form-submit">
     </form>
 </div>
-<div>
+<div class="grid">
     <% if(errorMessages !== '') { %>
         <ul>
             <% errorMessages.forEach((error) => { %>
