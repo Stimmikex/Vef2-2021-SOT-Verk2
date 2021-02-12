@@ -47,8 +47,8 @@ const nationalIdPattern = '^[0-9]{6}-?[0-9]{4}$';
 app.get('/', async (req, res) => {
   const data = await getData();
   try {
-    const errorMessages = "";
-    res.render('index', { title: 'Undirskriftarlisti', data, errorMessages});
+    const errorMessages = '';
+    res.render('index', { title: 'Undirskriftarlisti', data, errorMessages });
   } catch (e) {
     // eslint-disable-next-line no-console
     console.log(e);
@@ -94,7 +94,7 @@ app.post(
       // `,
       // );
       const data = await getData();
-      return res.render('index',{ title: 'Undirskriftarlisti', data, errorMessages});
+      return res.render('index', { title: 'Undirskriftarlisti', data, errorMessages });
     }
     return next();
   },
@@ -126,8 +126,8 @@ app.post(
 
     query('INSERT INTO signatures(name, nationalId, comment, anonymous) VALUES($1, $2, $3, $4) RETURNING *', [xssName, xssNational, xssText, checker(check)]);
     const data = await getData();
-    const errorMessages = "";
-    return res.render('index', { title: 'Undirskriftarlisti', data, errorMessages});
+    const errorMessages = '';
+    return res.render('index', { title: 'Undirskriftarlisti', data, errorMessages });
   },
 );
 
