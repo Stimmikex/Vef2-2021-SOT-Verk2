@@ -12,6 +12,7 @@
     "dev:sass": "node-sass --source-map-embed --watch ./public/style.scss --recursive ./dist/style.css",
     "dev": "npm run build:sass && concurrently npm:dev:*",
     "start-dev": "nodemon ./src/app.js",
+    "setup": "node ./src/setup.js",
     "start": "node ./src/app.js"
   },
   "author": "",

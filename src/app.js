@@ -42,6 +42,12 @@ function checker(check) {
   return false;
 }
 
+function isInvalid(field, errorMessages) {
+  return Boolean(errorMessages.find((i) => i.param === field));
+}
+
+app.locals.isInvalid = isInvalid;
+
 const nationalIdPattern = '^[0-9]{6}-?[0-9]{4}$';
 let errorMessages = '';
 
@@ -126,12 +132,10 @@ app.post(
 
     const test = await query('INSERT INTO signatures(name, nationalId, comment, anonymous) VALUES($1, $2, $3, $4) RETURNING *', [xssName, xssNational, xssText, checker(check)]);
 
+    const data = await getData();
     if (test.detail) {
       errorMessages = [test.detail];
-      const data = await getData();
-      return res.render('index', { title: 'Undirskriftarlisti', data, errorMessages });
     }
-    const data = await getData();
     return res.render('index', { title: 'Undirskriftarlisti', data, errorMessages });
   },
 );
